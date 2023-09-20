@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
   <title>SAM: Software Automatic Mouth</title>
   <style>
     body {
@@ -17,29 +18,11 @@
     }
     label { width: 30%}
     input { width: 60%}
-    input[type="submit"] { width: 100%;}
+    input[type="submit"], input[type="button"] { width: 100%;}
     input[type="range"] { transform: rotate(180deg);}
   </style>
 </head>
 <body>
-<h1> SAM Software Automatic Mouth</h1>
-<h2>What is SAM?</h2>
-<p>
-Sam is a very small Text-To-Speech (TTS) program written in Javascript,
-that runs on most popular platforms. It is an adaption to Javascript of
-the speech software SAM (Software Automatic Mouth) for the Commodore
-C64 published in the year 1982 by Don't Ask Software
-(now SoftVoice, Inc.). It includes a Text-To-Phoneme converter called
-reciter and a Phoneme-To-Speech routine for the final output.
-</p>
-<p>
-Currently compatible with Firefox, Chrome, Safari + iOS.
-The conversion was done by hand from the C source code by
-<a href="https://github.com/s-macke/SAM">Sebastian Macke</a>,
-and the refactored versions by
-<a href="https://github.com/vidarh/SAM">Vidar Hokstad</a> and
-<a href="https://github.com/8BitPimp/SAM">8BitPimp</a>
-</p>
 <script src="dist/samjs.js"></script>
 <script>
   opts = {
@@ -69,6 +52,12 @@ and the refactored versions by
       speech = sam.speak(this.textfield.value);
       speech.catch(() => {});
     });
+    document.querySelector("input[value=\"Download\"]").onclick = function(){
+      var sam = new SamJs(opts);
+      if (speech) speech.abort();
+      speech = sam.download(document.querySelector("input[name=\"textfield\"]").value);
+      speech.catch(() => {});
+    }
   });
 </script>
 
@@ -83,6 +72,7 @@ and the refactored versions by
     <label id="mouth-lbl" for="mouth">Mouth:   </label><input type="range" id="mouth" min="0" max="255" value="0" />
     <label id="throat-lbl" for="throat">Throat: </label><input type="range" id="throat" min="0" max="255" value="0" />
     <input type="submit" name="Text 1" value="Say">
+    <input type="button" value="Download" onclick="downloadSpeech()">
   </div>
 </form>
 <hr>
